@@ -1,181 +1,175 @@
-# Magisk on WSA (with Google Apps)
-
-:warning: For fork developers: Please don't build using GitHub Actions, as GitHub will count your forked GitHub Actions usage against this upstream repository, which may cause this upstream repository gets disabled by GitHub staff like [MagiskOnWSA](https://github.com/LSPosed/MagiskOnWSA) because of numerous forks building GitHub Actions, and counting the forks' Action usage against this upstream repository.
-
-## Support for generating from these systems
-
-- Linux (x86_64 or arm64)
-
-  The following dependencies are required:
-
-  | DistrOS             |                                                         |            |              |                    |               |              |
-  |:-------------------:|---------------------------------------------------------|------------|--------------|--------------------|---------------|--------------|
-  | Debian              | `lzip patchelf e2fsprogs python3 aria2 attr unzip sudo` | `whiptail` | `qemu-utils` | `python3-venv`     | `python3-pip` | `p7zip-full` |
-  | openSUSE Tumbleweed | Same as above                                           | `dialog`   | `qemu-tools` | `python3-venvctrl` | Same as above                |
-  | Arch                | Same as Debian                                          | `libnewt`  | `qemu-img`   |  Same as Debian    | `python-pip`  | `p7zip`      |
-
-  The python3 library `requests` is used.
-
-  Python version ≥ **3.7.2**.
-
-  - Recommended use
-
-    - Ubuntu (You can use [WSL2](https://apps.microsoft.com/store/search?publisher=Canonical%20Group%20Limited))
-
-      Ready to use right out of the box.
-
-    - Debian (You can use [WSL2](https://apps.microsoft.com/store/detail/debian/9MSVKQC78PK6))
-
-      Ready to use right out of the box.
-
-    - openSUSE Tumbleweed (You can use [WSL2](https://apps.microsoft.com/store/detail/opensuse-tumbleweed/9MSSK2ZXXN11))
-
-      Ready to use right out of the box.
-
-    `run.sh` will handle all dependencies automatically.
-
-    No need to type any commands.
-
-## Features
-
-- Integrate Magisk and GApps in a few clicks within minutes
-- Keep each build up to date
-- Support both ARM64 and x64
-- Support MindTheGapps
-- Remove Amazon Appstore
-- Fix VPN dialog not showing (use our [VpnDialogs app](https://github.com/LSPosed/VpnDialogs))
-- Add device administration feature
-- Unattended installation
-- Automatically activates developers mode in Windows 11
-- Update to the new version while preserving data with a one-click script
-- Merged all language packs
-
-## Text Guide
-
-1. Star (if you like).
-2. Clone the repo to local:
-
-   ```bash
-   git clone https://github.com/LSPosed/MagiskOnWSALocal.git --depth 1
-   ```
-
-3. Run `cd MagiskOnWSALocal`.
-4. Run `./scripts/run.sh`.
-5. Select the WSA version and its architecture (mostly x64).
-6. Select the version of Magisk.
-7. Choose which brand of GApps you want to install:
-   - MindTheGapps
-
-     There is no other variant we can choose.
-8. Select the root solution (none means no root).
-9. If you are running the script for the first time, it will take some time to complete. After the script completes, two new folders named `output` and `download` will be generated in the `MagiskOnWSALocal` folder. Go to the `output` folder. While running the `./run.sh` script in the step 3, if you selected `Yes` for `Do you want to compress the output?` then in `output` folder you will see a compressed file called `WSA-with-magisk-stable-MindTheGapps_2207.40000.8.0_x64_Release-Nightly`or else there will be folder with the `WSA-with-magisk-stable-MindTheGapps_2207.40000.8.0_x64_Release-Nightly`. If there is a folder open it and skip to step 10. NOTE: The name of compressed file or the folder generated in the `output` folder may be different for you. It will be dependent on the choices made when executing `./run.sh`.
-10. Extract the compressed file and open the folder created after the extraction of the file.
-11. Here look for file `Run.bat` and run it.
-    - If you previously have a MagiskOnWSA installation, it will automatically uninstall the previous one while **preserving all user data** and install the new one, so don't worry about your data.
-    - If you have an official WSA installation, you should uninstall it first. (In case you want to preserve your data, you can backup `%LOCALAPPDATA%\Packages\MicrosoftCorporationII.WindowsSubsystemForAndroid_8wekyb3d8bbwe\LocalCache\userdata.vhdx` before uninstallation and restore it after installation.)
-    - If the popup windows disappear **without asking administrative permission** and WSA is not installed successfully, you should manually run `Install.ps1` as Administrator:
-        1. Press `Win+x` and select `Windows Terminal (Admin)`.
-        2. Input `cd "{X:\path\to\your\extracted\folder}"` and press `enter`, and remember to replace `{X:\path\to\your\extracted\folder}` including the `{}`, for example `cd "D:\wsa"`
-        3. Input `PowerShell.exe -ExecutionPolicy Bypass -File .\Install.ps1` and press `Enter`.
-        4. The script will run and WSA will be installed.
-        5. If this workaround does not work, your PC is not supported for WSA.
-12. Magisk/Play Store will be launched. Enjoy by installing LSPosed-Zygisk with Zygisk enabled or Riru and LSPosed-Riru.
+这个自述文件是关于如何在Windows Subsystem for Android (WSA) 上安装Magisk和Google Apps（GApps）的指南。Magisk是一个在Android上提供root权限和系统修改功能的框架，而GApps是Google官方应用的集合，通常用于非Google品牌的Android设备。以下是该自述文件的翻译和一些必要的调整以确保其正常运行：
 
 ---
 
-## FAQ
+# Magisk on WSA（含Google Apps）
+
+:warning: 对于分叉开发者：请不要使用GitHub Actions构建，因为GitHub会将你的分叉GitHub Actions使用量计入这个上游仓库，这可能导致这个上游仓库因为大量分叉构建GitHub Actions而被GitHub工作人员禁用，就像[MagiskOnWSA](https://github.com/LSPosed/MagiskOnWSA)一样。
+
+## 支持以下系统的生成
+
+- Linux (x86_64或arm64)
+
+  需要以下依赖：
+
+  | 操作系统 | 依赖项 |
+  | --- | --- |
+  | Debian | `lzip patchelf e2fsprogs python3 aria2 attr unzip sudo` |
+  | openSUSE Tumbleweed | 同上 |
+  | Arch | 同Debian |
+
+  Python版本需要≥ **3.7.2**。
+
+  - 推荐使用
+
+    - Ubuntu (你可以使用[WSL2](https://apps.microsoft.com/store/search?publisher=Canonical%20Group%20Limited))
+
+      开箱即用。
+
+    - Debian (你可以使用[WSL2](https://apps.microsoft.com/store/detail/debian/9MSVKQC78PK6))
+
+      开箱即用。
+
+    - openSUSE Tumbleweed (你可以使用[WSL2](https://apps.microsoft.com/store/detail/opensuse-tumbleweed/9MSSK2ZXXN11))
+
+      开箱即用。
+
+    `run.sh`脚本会自动处理所有依赖项。
+
+    无需输入任何命令。
+
+## 特性
+
+- 几分钟内通过几次点击即可集成Magisk和GApps
+- 保持每个构建都是最新的
+- 支持ARM64和x64
+- 支持MindTheGapps
+- 移除Amazon Appstore
+- 修复VPN对话框不显示的问题（使用我们的[VpnDialogs应用](https://github.com/LSPosed/VpnDialogs)）
+- 添加设备管理功能
+- 无人值守安装
+- 自动激活Windows 11的开发者模式
+- 一键脚本更新到新版本同时保留数据
+- 合并所有语言包
+
+## 文本指南
+
+1. 如果你喜欢，可以给项目加星。
+2. 将仓库克隆到本地：
+
+   ```bash
+   git clone https://github.com/LSPosed/MagiskOnWSALocal.git  --depth 1
+   ```
+
+3. 运行 `cd MagiskOnWSALocal`。
+4. 运行 `./scripts/run.sh`。
+5. 选择WSA版本及其架构（通常是x64）。
+6. 选择Magisk的版本。
+7. 选择你想安装的GApps品牌：
+   - MindTheGapps
+
+    我们只能选择这一个。
+8. 选择root解决方案（无表示无root）。
+9. 如果你第一次运行脚本，它将需要一些时间来完成。脚本完成后，将在`MagiskOnWSALocal`文件夹中生成两个新文件夹`output`和`download`。进入`output`文件夹。在步骤3中运行`./run.sh`脚本时，如果你选择了`Do you want to compress the output?`，则在`output`文件夹中你将看到一个名为`WSA-with-magisk-stable-MindTheGapps_2207.40000.8.0_x64_Release-Nightly`的压缩文件，否则将是一个同名的文件夹。如果有一个文件夹，请打开它并跳到步骤10。注意：在`output`文件夹中生成的压缩文件或文件夹的名称可能对你来说不同。它将取决于执行`./run.sh`时所做的选择。
+10. 解压压缩文件并打开解压后创建的文件夹。
+11. 在这里找到`Run.bat`文件并运行它。
+    - 如果你之前有MagiskOnWSA安装，它将在**保留所有用户数据**的同时自动卸载旧版本并安装新版本，所以不用担心你的数据。
+    - 如果你有官方WSA安装，你应该先卸载它。（如果你想保留数据，可以在卸载前备份`%LOCALAPPDATA%\Packages\MicrosoftCorporationII.WindowsSubsystemForAndroid_8wekyb3d8bbwe\LocalCache\userdata.vhdx`，在安装后恢复它。）
+    - 如果弹出窗口在**没有请求管理权限**的情况下消失，并且WSA没有成功安装，你应该手动以管理员身份运行`Install.ps1`：
+        1. 按`Win+x`并选择`Windows Terminal (Admin)`。
+        2. 输入`cd "{X:\path\to\your\extracted\folder}"`并按`enter`，记得替换`{X:\path\to\your\extracted\folder}`，包括花括号，例如`cd "D:\wsa"`
+        3. 输入`PowerShell.exe -ExecutionPolicy Bypass -File .\Install.ps1`并按`Enter`。
+        4. 脚本将运行并安装WSA。
+        5. 如果这个变通方法不起作用，你的PC可能不支持WSA。
+12. Magisk/Play Store将启动。享受安装LSPosed-Zygisk（启用Zygisk）或Riru和LSPosed-Riru的乐趣。
+
+---
+
+## 常见问题解答
 
 <details open>
 
-- Can I delete the installed folder?
+- 我可以删除已安装的文件夹吗？
 
-  No.
+  不可以。
 
-- How can I update WSA to a newer version?
+- 如何更新WSA到较新版本？
 
-  1. Update build scripts:
+  1. 更新构建脚本：
 
       ```bash
       git pull
       ```
 
-      For more usage of git, referred to <https://git-scm.com/book>
+      更多关于git的使用，请参考<https://git-scm.com/book> 
 
-  2. Rerun the script, replace the content of your previous installation and rerun `Install.ps1`. Don't worry, your data will be preserved.
+  2. 重新运行脚本，替换你之前安装的内容并重新运行`Install.ps1`。别担心，你的数据将被保留。
 
-- How can I get the logcat from WSA?
+- 如何从WSA获取logcat？
 
   `%LOCALAPPDATA%\Packages\MicrosoftCorporationII.WindowsSubsystemForAndroid_8wekyb3d8bbwe\LocalState\diagnostics\logcat`
 
-- How can I update Magisk to a newer version?
+- 如何更新Magisk到较新版本？
 
-  Do the same as updating WSA.
+  和更新WSA的步骤一样。
 
-- How to pass Play Integrity (formerly known as SafetyNet)?
+- 如何通过Play Integrity（以前称为SafetyNet）？
 
-  Like all the other emulators, no way.
+  和其他所有模拟器一样，没有办法。
 
-- Virtualization is not enabled?
+- 虚拟化没有启用？
 
-  `Install.ps1` helps you enable it if not enabled. After rebooting, rerun `Install.ps1` to install WSA. If it's still not working, you have to enable virtualization in BIOS. That's a long story so ask Google for help.
+  `Install.ps1`会帮助你启用它，如果没有启用。重启后，重新运行`Install.ps1`来安装WSA。如果仍然不起作用，你可能需要在BIOS中启用虚拟化。这是一个很长的故事，所以请向谷歌寻求帮助。
 
-- How to remount the system as read-write?
+- 如何重新挂载系统为读写？
 
-  No way in WSA since it's mounted as read-only by Hyper-V. You can modify the system by making a Magisk module. Or directly modify the system.img. Ask Google for help.
+  在WSA中没有办法，因为它被Hyper-V挂载为只读。你可以通过制作Magisk模块来修改系统。或者直接修改system.img。向谷歌寻求帮助。
 
-- I cannot `adb connect localhost:58526`, what to do?
+- 我不能`adb connect localhost:58526`，该怎么办？
 
-  Make sure developer mode is enabled. If the issue persists, check the IP address of WSA on the setting page and try `adb connect ip:5555`.
+  确保开发者模式已启用。如果问题仍然存在，请检查WSA设置页面上的IP地址并尝试`adb connect ip:5555`。
 
-- Why the Magisk online module is empty?
+- 为什么Magisk在线模块为空？
 
-  Magisk actively removes the online module repository. You can install the module locally or by `adb push module.zip /data/local/tmp` and `adb shell su -c magisk --install-module /data/local/tmp/module.zip`.
+  Magisk积极移除了在线模块仓库。你可以本地安装模块，或者通过`adb push module.zip /data/local/tmp`和`adb shell su -c magisk --install-module /data/local/tmp/module.zip`来安装。
 
-- Can I use Magisk v23.0 stable or a lower version?
+- 我可以使用Magisk v23.0稳定版或更低版本吗？
 
-  No. Magisk has bugs preventing itself from running on WSA. Magisk v24+ has fixed them. So you must use Magisk v24 or later.
+  不可以。Magisk有bug阻止其在WSA上运行。Magisk v24+已经修复了这些问题。所以你必须使用Magisk v24或更高版本。
 
-- How can I get rid of Magisk?
+- 如何摆脱Magisk？
 
-  Choose `none` as the root solution.
+  选择`none`作为root解决方案。
 
-- How to install custom GApps?
+- 如何安装自定义GApps？
 
-  [Tutorial](Custom-GApps.md)
+  [教程](Custom-GApps.md)
 
-- Where can I download MindTheGapps?
+- 我可以从哪里下载MindTheGapps？
 
-  You can download from here [MindTheGapps](https://androidfilehost.com/?w=files&flid=322935) ([mirror](http://downloads.codefi.re/jdcteam/javelinanddart/gapps)).
+  你可以从这里下载[MindTheGapps](https://androidfilehost.com/?w=files&flid=322935) ([镜像](http://downloads.codefi.re/jdcteam/javelinanddart/gapps))。
 
-  Note that there is no x86_64 pre-build, so you need to build it by yourself ([Repository](https://gitlab.com/MindTheGapps/vendor_gapps)).
+  注意，没有x86_64预构建版本，所以你需要自己构建（[仓库](https://gitlab.com/MindTheGapps/vendor_gapps)）。
 
-  Or you can download the built package for 12.1 and 13 for x86_64 from [this page](https://sourceforge.net/projects/wsa-mtg/files/x86_64/).
+  或者你可以从[这个页面](https://sourceforge.net/projects/wsa-mtg/files/x86_64/)下载为12.1和13构建的包。
 
-- Can I switch OpenGApps to MindTheGapps and keep user data in a previous build?
+- 我可以切换OpenGApps到MindTheGapps并保留之前构建的用户数据吗？
 
-  No. You should wipe data after changing the GApps brand. Otherwise, you will find that the installed GApps are not recognized.
+  不可以。更改GApps品牌后，你应该擦除数据。否则，你会发现安装的GApps不被识别。
 
-- WSA with OpenGApps integrated fails to start.
+- 集成OpenGApps的WSA无法启动。
 
-  OpenGApps has not yet released a version built for Android 12L and 13, only built for Android 11, which may not be compatible and thus cause crashes. Consider switching to MindTheGapps.
+  OpenGApps尚未发布为Android 12L和13构建的版本，只发布了为Android 11构建的版本，可能不兼容从而导致崩溃。考虑切换到MindTheGapps。
 
-- How to install KernelSU?
+- 如何安装KernelSU？
 
-  [Tutorial](KernelSU.md)
+  [教程](KernelSU.md)
 
 </details>
 
 ---
 
-## Credits
+## 致谢
 
-- [StoreLib](https://github.com/StoreDev/StoreLib): API for downloading WSA
-- [Magisk](https://github.com/topjohnwu/Magisk): The most famous root solution on Android
-- [The Open GApps Project](https://opengapps.org): One of the most famous Google Apps packages solution
-- [WSA-Kernel-SU](https://github.com/LSPosed/WSA-Kernel-SU) and [kernel-assisted-superuser](https://git.zx2c4.com/kernel-assisted-superuser/): The kernel `su` for debugging Magisk Integration
-- [WSAGAScript](https://github.com/ADeltaX/WSAGAScript): The first GApps integration script for WSA
-- [erofs-utils](https://github.com/sekaiacg/erofs-utils): Pre-build `erofs-utils` with erofsfuse enabled
-
-_The repository is provided as a utility._
-
-_Android is a trademark of Google LLC. Windows is a trademark of Microsoft Corporation._
+- [StoreLib](https://github.com/StoreDev/StoreLib)：下载WSA的API
+- [Magisk](https://github.com/topjohnwu/Magisk)：Android上最著名的
